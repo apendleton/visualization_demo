@@ -1,0 +1,1 @@
+https://bitbucket.org/apendleton/pysqlite/get/e162beae1215.bz2
