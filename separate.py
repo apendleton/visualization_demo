@@ -6,8 +6,8 @@ from pysqlite2 import dbapi2 as sqlite3
 conn = sqlite3.connect('vizdata.sqlite3')
 
 # load spatialite
-conn.enable_load_extension(True)
-conn.load_extension('libspatialite.2.dylib')
+# conn.enable_load_extension(True)
+# conn.load_extension('libspatialite.2.dylib')
 
 c = conn.cursor()
 
@@ -16,12 +16,13 @@ c.execute('create table pols (id integer primary key autoincrement not null, nam
 c.execute('create unique index if not exists pk on pols (id)')
 
 c.execute('drop table if exists contributions')
-c.execute('create table contributions (id integer primary key autoincrement not null, pols_id integer not null, name text, date integer, amount float, address text, city text, state text, zipcode text)')
+# c.execute('create table contributions (id integer primary key autoincrement not null, pols_id integer not null, name text, date integer, amount float, address text, city text, state text, zipcode text)')
+c.execute('create table contributions (id integer primary key autoincrement not null, pols_id integer not null, name text, date integer, amount float, address text, city text, state text, zipcode text, x float, y float)')
 c.execute('create unique index if not exists pk on contributions (id)')
 c.execute('create index if not exists pols_fk on contributions(pols_id)')
 c.execute('create index if not exists date_index on contributions(date)')
 
-c.execute("select AddGeometryColumn('contributions', 'coords', 4326, 'POINT', 2)")
+# c.execute("select AddGeometryColumn('contributions', 'coords', 4326, 'POINT', 2)")
 
 pol_ids = c.execute('select distinct recipient_ext_id from orig_data where seat = "federal:house" or seat = "federal:senate" or seat = "federal:president"')
 

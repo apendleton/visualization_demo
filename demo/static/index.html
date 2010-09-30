@@ -1,1 +1,54 @@
-<h1>Hello, World!</h1>
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script type="text/javascript" src="/static/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="/static/processing-0.9.7.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                /* constants */
+                var width = 640;
+                var height = 480;
+                var minX = -13889332.866276743;
+                var maxX = -7452839.908609666;
+                var minY = 2799174.800627069;
+                var maxY = 6307135.967290432;
+                
+                /* Processing setup */
+                function setup_processing() {
+                    var canvas = $('#processing-canvas');
+                    return new Processing(canvas.get(0));
+                }
+                
+                function setup_app(p) {
+                    p.size(640, 480);
+                    p.stroke(255);
+                }
+                
+                function draw(p) {
+                    p.background(75);
+                    for (i in points) {
+                        var x = p.map(points[i].x, minX, maxX, 0, width);
+                        var y = p.map(points[i].y, minY, maxY, height, 0);
+                        p.point(x, y);
+                    }
+                }
+                
+                /* run the code */
+                var points = [];
+                var p = setup_processing();
+                console.log(p);
+                setup_app(p);
+                setInterval(function() { draw(p); }, 10);
+                
+                /* data fetching */
+                $.getJSON('/pol/442/contributions', function(data) {
+                    points = data;
+                });
+            })
+        </script>
+    </head>
+    <body>
+        <canvas id="processing-canvas"></canvas>
+    </body>
+</html>

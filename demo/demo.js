@@ -19,7 +19,7 @@ var app = dj.makeApp([
     }],
     ['^/(static/.*)$', dj.serveFile],
     ['^/pol/(\\d+)/contributions', function(req, res, id) {
-        db.execute('select id, name, X(coords) from contributions where pols_id = ?', [id], function(error, rows) {
+        db.execute('select x, y from contributions where pols_id = ? and x is not null and y is not null', [id], function(error, rows) {
             if (error) {
                 sys.log(error);
             } else {
